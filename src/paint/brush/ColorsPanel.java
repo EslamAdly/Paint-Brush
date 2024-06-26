@@ -30,13 +30,12 @@ public class ColorsPanel extends JPanel{
         black =createColorButton("Black",Color.black);
         red =createColorButton("RED",Color.red);
         green =createColorButton("Green",Color.green);
+        blue=createColorButton("Blue",Color.blue);
 
-
-        add(red);
-        
-        add(green);
-        
-       // add(blue);
+        this.add(black);
+        this.add(red);
+        this.add(green);
+        this.add(blue);
         
         setLayout(new GridLayout(1, 5, 1, 2));
         setBorder(new TitledBorder("Colors"));
@@ -55,9 +54,9 @@ public class ColorsPanel extends JPanel{
         button.addActionListener(new ColorChange());
         return button;
     }
-    class ColorChange implements ActionListener{
     
-
+    
+    class ColorChange implements ActionListener{
         @Override
         public void actionPerformed(ActionEvent e) {
             System.out.println(((JButton)e.getSource()).getBackground()); 
