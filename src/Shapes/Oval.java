@@ -5,31 +5,43 @@
  */
 package Shapes;
 import java.awt.Color;
+import java.awt.Graphics;
 /**
  *
  * @author ESLAM
  */
 public class Oval extends Shape{
-    private float width,height;
-    Oval(int x1,int y1,int x2,int y2,Color color,boolean fillState){
+    private  int width,height;
+    public Oval(int x1,int y1,int x2,int y2,Color color,boolean fillState){
         super(x1, y1, x2, y2,color,fillState);
         
         width=calcWidth();
         height=calcHeight();
     }
-    private float calcWidth(){
+    private int calcWidth(){
         return x2-x1;
     }
-    private float calcHeight(){
+    private int calcHeight(){
         return y2-y1;
     }
 
-    public float getWidth() {
+    public int getWidth() {
         return width;
     }
 
-    public float getHeight() {
+    public int getHeight() {
         return height;
     }
+
+    @Override
+    public void draw(Graphics g) {
+        if(fillState){
+            g.fillOval(x1, y1,width, height);
+        }
+        else{
+            g.drawOval(x1, y1, width, height);
+        }
+    }
+    
     
 }
