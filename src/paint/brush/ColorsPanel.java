@@ -22,8 +22,8 @@ public class ColorsPanel extends JPanel{
     JButton red ;
     JButton black;
     JButton blue;
-    MainScene frame;
-    ColorsPanel(MainScene frame){
+    DrawingPanel frame;
+    ColorsPanel(DrawingPanel frame){
         
         this.frame =frame;
         
@@ -37,7 +37,7 @@ public class ColorsPanel extends JPanel{
         this.add(green);
         this.add(blue);
         
-        setLayout(new GridLayout(1, 5, 1, 2));
+        setLayout(new GridLayout(1, 4, 5, 5));
         setBorder(new TitledBorder("Colors"));
     }
     /**
@@ -60,7 +60,7 @@ public class ColorsPanel extends JPanel{
         @Override
         public void actionPerformed(ActionEvent e) {
             System.out.println(((JButton)e.getSource()).getBackground()); 
-            frame.current=((JButton)e.getSource()).getBackground();
+            frame.currentColor=((JButton)e.getSource()).getBackground();
         }
     }
 }
