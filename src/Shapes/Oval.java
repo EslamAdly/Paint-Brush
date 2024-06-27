@@ -35,6 +35,7 @@ public class Oval extends Shape{
 
     @Override
     public void draw(Graphics g) {
+        g.setColor(color);
         if(fillState){
             g.fillOval(x1, y1,width, height);
         }

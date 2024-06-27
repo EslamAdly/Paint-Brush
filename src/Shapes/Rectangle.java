@@ -36,6 +36,7 @@ public class Rectangle extends Shape{
 
     @Override
     public void draw(Graphics g) {
+        g.setColor(color);
         if(fillState){
             g.fillRect(x1, y1, width, height);
         }
