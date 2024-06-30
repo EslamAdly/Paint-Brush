@@ -13,8 +13,8 @@ public abstract class Shape {
     final int x1;
     final int y1;
     //end point
-    final int x2;
-    final int y2;
+    public int x2;
+    public int y2;
 
     Color color;
 

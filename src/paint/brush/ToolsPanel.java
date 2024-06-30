@@ -13,7 +13,11 @@ import java.awt.event.ItemListener;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.border.TitledBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 /**
  *
@@ -22,16 +26,16 @@ import javax.swing.border.TitledBorder;
 public class ToolsPanel extends JPanel {
     DrawingPanel drawingPanel;
     
-    JButton clear;
-    JButton undo;
+    private JButton clear;
+    private JButton undo;
     
-    JButton lineButton;
-    JButton rectangleButton ;
-    JButton ovalButton;
-    JButton pencilButton;
-    JButton eraserButton;
-
-    JCheckBox solid;
+    private JButton lineButton;
+    private JButton rectangleButton ;
+    private JButton ovalButton;
+    private JButton pencilButton;
+    private JButton eraserButton;
+    private JSpinner sizeSpinner;
+    private JCheckBox solid;
     public ToolsPanel(DrawingPanel frame) {
         this.drawingPanel = frame;
         
@@ -47,6 +51,9 @@ public class ToolsPanel extends JPanel {
         
         solid=new JCheckBox("Solid");
         
+        sizeSpinner=new JSpinner(new SpinnerNumberModel(1, 1, 50, 1)); // initial value, min, max, step
+        
+        
         // Set up action listeners
         lineButton.addActionListener(new ToolActionListener(ShapeType.Line));
         rectangleButton.addActionListener(new ToolActionListener(ShapeType.Rectangle));
@@ -57,17 +64,30 @@ public class ToolsPanel extends JPanel {
         clear.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
-                drawingPanel.shapes.clear();
-                drawingPanel.repaint();
+                drawingPanel.clearShapes();
+            }
+        });
+        undo.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                drawingPanel.removeLast();
             }
         });
         
         solid.addItemListener(new ItemListener(){
             @Override
             public void itemStateChanged(ItemEvent e) {
-                drawingPanel.currentFillState=!drawingPanel.currentFillState;
+                //drawingPanel.currentFillState=!drawingPanel.currentFillState;
+                drawingPanel.setCurrentFillState(!drawingPanel.getcurrentFillState());
             }
             
+        });
+        
+        sizeSpinner.addChangeListener(new ChangeListener (){
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                drawingPanel.setCurrentPencilSize((int)sizeSpinner.getValue());   
+            }
         });
         
         //Add buttons to panel
@@ -80,7 +100,7 @@ public class ToolsPanel extends JPanel {
         add(pencilButton);
         add(eraserButton);
         add(solid);
-
+        add (sizeSpinner);
         setLayout(new GridLayout(1, 4, 5, 5));
         setBorder(new TitledBorder("Paint Mode"));
     }
@@ -93,7 +113,7 @@ public class ToolsPanel extends JPanel {
         
         @Override
         public void actionPerformed(ActionEvent e) {
-            drawingPanel.currentShapeType=type;
+            drawingPanel.setCurrentShapeType(type);
         }
     }
 }
