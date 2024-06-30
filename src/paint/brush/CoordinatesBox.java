@@ -17,8 +17,8 @@ public class CoordinatesBox extends JPanel {
     JLabel coordinates;
     public CoordinatesBox() {
         coordinates =new JLabel("Location: 0, 0 px");
-        add(coordinates);
-        setBorder(new TitledBorder(""));
+        this.add(coordinates);
+        this.setBorder(new TitledBorder(""));
     }
 
     public JLabel getCoordinates() {

@@ -22,10 +22,10 @@ public class ColorsPanel extends JPanel{
     JButton red ;
     JButton black;
     JButton blue;
-    DrawingPanel frame;
+    DrawingPanel drawingPanel;
     ColorsPanel(DrawingPanel frame){
         
-        this.frame =frame;
+        this.drawingPanel =frame;
         
         black =createColorButton("Black",Color.black);
         red =createColorButton("RED",Color.red);
@@ -59,8 +59,7 @@ public class ColorsPanel extends JPanel{
     class ColorChange implements ActionListener{
         @Override
         public void actionPerformed(ActionEvent e) {
-            System.out.println(((JButton)e.getSource()).getBackground()); 
-            frame.currentColor=((JButton)e.getSource()).getBackground();
+            drawingPanel.setCurrentColor(((JButton)e.getSource()).getBackground());
         }
     }
 }
