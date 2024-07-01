@@ -5,8 +5,9 @@
  */
 package Shapes;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.Graphics;
+import java.awt.Graphics2D;
 
 /**
  *
@@ -14,8 +15,8 @@ import java.awt.Graphics;
  */
 public class Rectangle extends Shape{
     private int width,height;
-    public Rectangle(int x1,int y1,int x2,int y2,Color color,boolean fillState){
-        super(x1, y1, x2, y2,color,fillState);
+    public Rectangle(int x1,int y1,int x2,int y2,int size,Color color,boolean fillState){
+        super(x1, y1, x2, y2,size,color,fillState);
         width=calcWidth();
         height=calcHeight();
     }
@@ -35,13 +36,15 @@ public class Rectangle extends Shape{
     }
 
     @Override
-    public void draw(Graphics g) {
-        g.setColor(color);
+    public void draw(Graphics2D g2d) {
+        g2d.setColor(color);
+        g2d.setStroke(new BasicStroke(size, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+
         if(fillState){
-            g.fillRect(x1, y1, width, height);
+            g2d.fillRect(x1, y1, width, height);
         }
         else{
-            g.drawRect(x1, y1, width, height);
+            g2d.drawRect(x1, y1, width, height);
 
         }
     }

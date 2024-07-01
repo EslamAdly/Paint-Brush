@@ -6,8 +6,11 @@
 package paint.brush;
 
 import Shapes.*;
+import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -23,10 +26,13 @@ public class DrawingPanel extends JPanel {
     private Shape currentPencil;
     private ShapeType currentShapeType;
 
+    //isDrawing Flag to indicate whether drawing is in progress to avoid NullPointerException when drawing a pencil shape
     private boolean isDrawing;
+    //Flag to check if the mouse has been dragged. Ensures mouseReleased logic only executes if a drag event has occurred
+    private boolean hasDragged;
     private boolean currentFillState;
     private Color currentColor;
-    private int currentPencilSize;
+    private int currentSize;
 
     private final ArrayList<Shape> shapes;
     private int x1, y1, x2, y2;
@@ -42,14 +48,15 @@ public class DrawingPanel extends JPanel {
         this.currentFillState = false;
         this.isDrawing = true;
         this.shapes = new ArrayList<>();
-        this.currentPencilSize = 0;
+        this.currentSize = 0;
 
         addMouseListener(new MouseInput());
         addMouseMotionListener(new MouseMove());
     }
+    // Setters for various properties
 
-    public void setCurrentPencilSize(int currentPencilSize) {
-        this.currentPencilSize = currentPencilSize;
+    public void setCurrentSize(int currentSize) {
+        this.currentSize = currentSize;
     }
 
     public ShapeType getCurrentShapeType() {
@@ -111,35 +118,41 @@ public class DrawingPanel extends JPanel {
 
         @Override
         public void mousePressed(MouseEvent e) {
+
             x1 = e.getX();
             y1 = e.getY();
             switch (currentShapeType) {
                 case Pencil:
-                    currentPencil = new Pencil(x1, y1, currentPencilSize, currentColor);
+                    currentPencil = new Pencil(x1, y1, currentSize, currentColor);
                     break;
                 case Eraser:
-                    currentPencil = new Pencil(x1, y1, currentPencilSize, Color.WHITE);
+                    currentPencil = new Pencil(x1, y1, currentSize, Color.WHITE);
                     break;
                 default:
                     currentPencil = null;
                     break;
             }
-                        isDrawing = true;
+            isDrawing = true;
+            hasDragged = false;
 
         }
 
         @Override
         public void mouseReleased(MouseEvent e) {
+            if (!hasDragged) {
+                return;
+            }
             int drawPoints[] = getMinMaxPoints();
+
             switch (currentShapeType) {
                 case Line:
-                    shapes.add(new Line(x1, y1, x2, y2, currentColor));
+                    shapes.add(new Line(x1, y1, x2, y2, currentSize, currentColor));
                     break;
                 case Rectangle:
-                    shapes.add(new Rectangle(drawPoints[0], drawPoints[1], drawPoints[2], drawPoints[3], currentColor, currentFillState));
+                    shapes.add(new Rectangle(drawPoints[0], drawPoints[1], drawPoints[2], drawPoints[3], currentSize, currentColor, currentFillState));
                     break;
                 case Oval:
-                    shapes.add(new Oval(drawPoints[0], drawPoints[1], drawPoints[2], drawPoints[3], currentColor, currentFillState));
+                    shapes.add(new Oval(drawPoints[0], drawPoints[1], drawPoints[2], drawPoints[3], currentSize, currentColor, currentFillState));
                     break;
                 case Eraser:
                 case Pencil:
@@ -149,10 +162,14 @@ public class DrawingPanel extends JPanel {
             }
             isDrawing = false;
             repaint();
+
         }
 
         @Override
         public void mouseEntered(MouseEvent e) {
+            // Set crosshair cursor when drawing starts
+            setCursor(Cursor.getPredefinedCursor(Cursor.CROSSHAIR_CURSOR)); 
+            
         }
 
         @Override
@@ -170,7 +187,7 @@ public class DrawingPanel extends JPanel {
             if (currentPencil instanceof Pencil) {
                 ((Pencil) currentPencil).addPoint(x2, y2);
             }
-
+            hasDragged = true;
             repaint();
         }
 
@@ -183,40 +200,41 @@ public class DrawingPanel extends JPanel {
 
     @Override
     public void paint(Graphics g) {
-        
-        if(currentShapeType!=ShapeType.Pencil){
-            g=(Graphics)g;
-        }
         super.paint(g);
+        //cast g to Graphics2D
+        Graphics2D g2d = (Graphics2D) g;
 
         int drawPoints[] = getMinMaxPoints();
 
         for (Shape shape : shapes) {
-            shape.draw(g);
+            shape.draw(g2d);
         }
         if (isDrawing) {
-            g.setColor(currentColor);
+            //cap: The end cap style, which defines how the end points of lines are drawn.
+            //join: The line join style, which defines how two line segments are joined together
+            g2d.setStroke(new BasicStroke(currentSize, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+            g2d.setColor(currentColor);
             switch (currentShapeType) {
                 case Line:
-                    g.drawLine(x1, y1, x2, y2);
+                    g2d.drawLine(x1, y1, x2, y2);
                     break;
                 case Rectangle:
                     if (currentFillState) {
-                        g.fillRect(drawPoints[0], drawPoints[1], drawPoints[2] - drawPoints[0], drawPoints[3] - drawPoints[1]);
+                        g2d.fillRect(drawPoints[0], drawPoints[1], drawPoints[2] - drawPoints[0], drawPoints[3] - drawPoints[1]);
                     } else {
-                        g.drawRect(drawPoints[0], drawPoints[1], drawPoints[2] - drawPoints[0], drawPoints[3] - drawPoints[1]);
+                        g2d.drawRect(drawPoints[0], drawPoints[1], drawPoints[2] - drawPoints[0], drawPoints[3] - drawPoints[1]);
                     }
                     break;
                 case Oval:
                     if (currentFillState) {
-                        g.fillOval(drawPoints[0], drawPoints[1], drawPoints[2] - drawPoints[0], drawPoints[3] - drawPoints[1]);
+                        g2d.fillOval(drawPoints[0], drawPoints[1], drawPoints[2] - drawPoints[0], drawPoints[3] - drawPoints[1]);
                     } else {
-                        g.drawOval(drawPoints[0], drawPoints[1], drawPoints[2] - drawPoints[0], drawPoints[3] - drawPoints[1]);
+                        g2d.drawOval(drawPoints[0], drawPoints[1], drawPoints[2] - drawPoints[0], drawPoints[3] - drawPoints[1]);
                     }
                     break;
                 case Pencil:
                 case Eraser:
-                    currentPencil.draw(g);
+                    currentPencil.draw(g2d);
                     break;
             }
         }
