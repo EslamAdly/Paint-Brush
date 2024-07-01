@@ -5,6 +5,7 @@
  */
 package paint.brush;
 
+import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -36,6 +37,8 @@ public class ToolsPanel extends JPanel {
     private JButton eraserButton;
     private JSpinner sizeSpinner;
     private JCheckBox solid;
+    
+    private JPanel sizePanel;
     public ToolsPanel(DrawingPanel frame) {
         this.drawingPanel = frame;
         
@@ -50,10 +53,12 @@ public class ToolsPanel extends JPanel {
         eraserButton = new JButton("Eraser");
         
         solid=new JCheckBox("Solid");
-        
-        sizeSpinner=new JSpinner(new SpinnerNumberModel(1, 1, 50, 1)); // initial value, min, max, step
-        
-        
+
+        sizePanel = new JPanel();
+        sizePanel.setBorder(new TitledBorder("Size"));
+        sizeSpinner = new JSpinner(new SpinnerNumberModel(1, 1, 50, 1));
+        sizePanel.add(sizeSpinner);
+           
         // Set up action listeners
         lineButton.addActionListener(new ToolActionListener(ShapeType.Line));
         rectangleButton.addActionListener(new ToolActionListener(ShapeType.Rectangle));
@@ -86,7 +91,7 @@ public class ToolsPanel extends JPanel {
         sizeSpinner.addChangeListener(new ChangeListener (){
             @Override
             public void stateChanged(ChangeEvent e) {
-                drawingPanel.setCurrentPencilSize((int)sizeSpinner.getValue());   
+                drawingPanel.setCurrentSize((int)sizeSpinner.getValue());   
             }
         });
         
@@ -100,7 +105,7 @@ public class ToolsPanel extends JPanel {
         add(pencilButton);
         add(eraserButton);
         add(solid);
-        add (sizeSpinner);
+        add (sizePanel);
         setLayout(new GridLayout(1, 4, 5, 5));
         setBorder(new TitledBorder("Paint Mode"));
     }

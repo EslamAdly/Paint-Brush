@@ -23,16 +23,18 @@ public class Pencil extends Shape {
     private final ArrayList<Integer> xPoints;
     private final ArrayList<Integer> yPoints;
     private final int size;
-    /***
-     * 
-     * @param x1  start X point of pencil shape 
-     * @param y1  start Y point of pencil shape
+
+    /**
+     * *
+     *
+     * @param x1 start X point of pencil shape
+     * @param y1 start Y point of pencil shape
      * @param size size of shape
      * @param color color of shape
      */
-    public Pencil(int x1, int y1,int size, Color color) {
-        super(x1, y1, 0, 0, color, false);
-        this.size=size;
+    public Pencil(int x1, int y1, int size, Color color) {
+        super(x1, y1, 0, 0, size, color, false);
+        this.size = size;
         xPoints = new ArrayList<>();
         yPoints = new ArrayList<>();
         addPoint(x1, y1);
@@ -45,19 +47,14 @@ public class Pencil extends Shape {
 
 //draw without using 2d graphics
     @Override
-    public void draw(Graphics g) {
-        g.setColor(color);
-        //System.out.println(size);
+    public void draw(Graphics2D g2d) {
+        g2d.setColor(color);
+        g2d.setStroke(new BasicStroke(size, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+
         for (int i = 0; i < xPoints.size() - 1; i++) {
-            for(int j=0;j<=size;j++){
-                g.drawLine(xPoints.get(i), yPoints.get(i)+j, xPoints.get(i + 1), yPoints.get(i + 1)+j);
-                g.drawLine(xPoints.get(i), yPoints.get(i)-j, xPoints.get(i + 1), yPoints.get(i + 1)-j);
-                
-                g.drawLine(xPoints.get(i)+j, yPoints.get(i), xPoints.get(i + 1)+j, yPoints.get(i + 1));
-                g.drawLine(xPoints.get(i)-j, yPoints.get(i), xPoints.get(i + 1)-j, yPoints.get(i + 1));
-                
-            }
+            g2d.drawLine(xPoints.get(i), yPoints.get(i), xPoints.get(i + 1), yPoints.get(i + 1));
         }
+
     }
 
 }

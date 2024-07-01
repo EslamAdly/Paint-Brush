@@ -2,6 +2,7 @@ package Shapes;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 
 /**
  *
@@ -16,7 +17,8 @@ public abstract class Shape {
     public int x2;
     public int y2;
 
-    Color color;
+    final int size; 
+    final Color color;
 
     final boolean fillState;
 
@@ -28,10 +30,11 @@ public abstract class Shape {
      * @param y1 The y-coordinate of the first point.
      * @param x2 The x-coordinate of the second point.
      * @param y2 The y-coordinate of the second point.
+     * @param size specifies the thickness of the lines
      * @param color The color of the shape.
      * @param fillState True if the shape is filled, false otherwise.
      */
-    public Shape(int x1, int y1, int x2, int y2, Color color, boolean fillState) {
+    public Shape(int x1, int y1, int x2, int y2,int size, Color color, boolean fillState) {
 
         if (this instanceof Line) {
             // Keep original coordinates for lines
@@ -48,6 +51,7 @@ public abstract class Shape {
             this.x2 = Math.max(x1, x2);
             this.y2 = Math.max(y1, y2);
         }
+        this.size=size;
         this.color = color;
         this.fillState = fillState;
     }
@@ -57,6 +61,6 @@ public abstract class Shape {
      *
      * @param g The Graphics object to draw with.
      */
-    public abstract void draw(Graphics g);
+    public abstract void draw(Graphics2D g);
 
 }
