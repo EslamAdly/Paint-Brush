@@ -5,117 +5,93 @@
  */
 package paint.brush;
 
-import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.border.TitledBorder;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
+
 
 /**
  *
  * @author ESLAM
  */
 public class ToolsPanel extends JPanel {
-    DrawingPanel drawingPanel;
-    
-    private JButton clear;
-    private JButton undo;
-    
-    private JButton lineButton;
-    private JButton rectangleButton ;
-    private JButton ovalButton;
-    private JButton pencilButton;
-    private JButton eraserButton;
-    private JSpinner sizeSpinner;
-    private JCheckBox solid;
-    
-    private JPanel sizePanel;
+
+    private final DrawingPanel drawingPanel;
+    private final JButton clearButton;
+    private final JButton undoButton;
+    private final JButton lineButton;
+    private final JButton rectangleButton;
+    private final JButton ovalButton;
+    private final JButton pencilButton;
+    private final JButton eraserButton;
+    private final JSpinner sizeSpinner;
+    private final JCheckBox solidCheckBox;
+    private final JPanel sizePanel;
+
     public ToolsPanel(DrawingPanel frame) {
         this.drawingPanel = frame;
-        
+
         //Create buttons
-        clear=new JButton("Clear");
-        undo=new JButton("Undo");
-        
+        clearButton = new JButton("Clear");
+        undoButton = new JButton("Undo");
         lineButton = new JButton("Line");
         rectangleButton = new JButton("Rectangle");
         ovalButton = new JButton("Oval");
         pencilButton = new JButton("Pencil");
         eraserButton = new JButton("Eraser");
-        
-        solid=new JCheckBox("Solid");
+        solidCheckBox = new JCheckBox("Solid");
 
+        // Create size control panel
         sizePanel = new JPanel();
         sizePanel.setBorder(new TitledBorder("Size"));
         sizeSpinner = new JSpinner(new SpinnerNumberModel(1, 1, 50, 1));
         sizePanel.add(sizeSpinner);
-           
-        // Set up action listeners
+
+        // Set up action listeners for tool buttons
         lineButton.addActionListener(new ToolActionListener(ShapeType.Line));
         rectangleButton.addActionListener(new ToolActionListener(ShapeType.Rectangle));
         ovalButton.addActionListener(new ToolActionListener(ShapeType.Oval));
         pencilButton.addActionListener(new ToolActionListener(ShapeType.Pencil));
         eraserButton.addActionListener(new ToolActionListener(ShapeType.Eraser));
 
-        clear.addActionListener(new ActionListener(){
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                drawingPanel.clearShapes();
-            }
-        });
-        undo.addActionListener(new ActionListener(){
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                drawingPanel.removeLast();
-            }
-        });
-        
-        solid.addItemListener(new ItemListener(){
-            @Override
-            public void itemStateChanged(ItemEvent e) {
-                //drawingPanel.currentFillState=!drawingPanel.currentFillState;
-                drawingPanel.setCurrentFillState(!drawingPanel.getcurrentFillState());
-            }
-            
-        });
-        
-        sizeSpinner.addChangeListener(new ChangeListener (){
-            @Override
-            public void stateChanged(ChangeEvent e) {
-                drawingPanel.setCurrentSize((int)sizeSpinner.getValue());   
-            }
-        });
-        
+        // Set up action listeners for clear and undo buttons
+        clearButton.addActionListener(e -> drawingPanel.clearShapes());
+        undoButton.addActionListener(e -> drawingPanel.removeLast());
+
+        // Set up item listener for solid checkbox
+        solidCheckBox.addItemListener(e -> drawingPanel.setCurrentFillState(!drawingPanel.getcurrentFillState()));
+
+        // Set up change listener for size spinner
+        sizeSpinner.addChangeListener(e -> drawingPanel.setCurrentSize((int) sizeSpinner.getValue()));
+
         //Add buttons to panel
-        add(undo);
-        add(clear);
-        
+        add(undoButton);
+        add(clearButton);
         add(lineButton);
         add(rectangleButton);
         add(ovalButton);
         add(pencilButton);
         add(eraserButton);
-        add(solid);
-        add (sizePanel);
+        add(solidCheckBox);
+        add(sizePanel);
         setLayout(new GridLayout(1, 4, 5, 5));
         setBorder(new TitledBorder("Paint Mode"));
     }
-    class ToolActionListener implements ActionListener{
-        ShapeType type;
+
+    /**
+     * ToolActionListener is a helper class to handle selection of shape tools.
+     */
+    class ToolActionListener implements ActionListener {
+        private final ShapeType type;
         public ToolActionListener(ShapeType type) {
-            this.type=type;
+            this.type = type;
         }
-        
-        
         @Override
         public void actionPerformed(ActionEvent e) {
             drawingPanel.setCurrentShapeType(type);

@@ -33,14 +33,15 @@ public class Pencil extends Shape {
      * @param color color of shape
      */
     public Pencil(int x1, int y1, int size, Color color) {
-        super(x1, y1, 0, 0, size, color, false);
+        super(x1, y1, size, color, false);
         this.size = size;
         xPoints = new ArrayList<>();
         yPoints = new ArrayList<>();
-        addPoint(x1, y1);
+        updateCoordinates(x1, y1);
     }
 
-    public void addPoint(int x, int y) {
+    @Override
+    public void updateCoordinates(int x, int y) {
         xPoints.add(x);
         yPoints.add(y);
     }

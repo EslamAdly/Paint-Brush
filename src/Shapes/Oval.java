@@ -7,7 +7,6 @@ package Shapes;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 
 /**
@@ -16,40 +15,27 @@ import java.awt.Graphics2D;
  */
 public class Oval extends Shape {
 
-    private int width, height;
+    private int drawPoints [];
 
-    public Oval(int x1, int y1, int x2, int y2, int size, Color color, boolean fillState) {
-        super(x1, y1, x2, y2, size, color, fillState);
-
-        width = calcWidth();
-        height = calcHeight();
+    public Oval(int x1, int y1, int size, Color color, boolean fillState) {
+        super(x1, y1, size, color, fillState);
     }
 
-    private int calcWidth() {
-        return x2 - x1;
-    }
-
-    private int calcHeight() {
-        return y2 - y1;
-    }
-
-    public int getWidth() {
-        return width;
-    }
-
-    public int getHeight() {
-        return height;
+    @Override
+    public void updateCoordinates(int x, int y) {
+        x2=x;
+        y2=y;
+        drawPoints = getMinMaxPoints();
     }
 
     @Override
     public void draw(Graphics2D g2d) {
         g2d.setColor(color);
         g2d.setStroke(new BasicStroke(size, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
-
         if (fillState) {
-            g2d.fillOval(x1, y1, width, height);
+            g2d.fillOval(drawPoints[0], drawPoints[1], drawPoints[2] - drawPoints[0], drawPoints[3] - drawPoints[1]);
         } else {
-            g2d.drawOval(x1, y1, width, height);
+            g2d.drawOval(drawPoints[0], drawPoints[1], drawPoints[2] - drawPoints[0], drawPoints[3] - drawPoints[1]);
         }
     }
 

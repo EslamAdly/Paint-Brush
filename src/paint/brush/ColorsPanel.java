@@ -18,10 +18,10 @@ import javax.swing.border.TitledBorder;
  * @author ESLAM
  */
 public class ColorsPanel extends JPanel{
-    JButton green;
-    JButton red ;
-    JButton black;
-    JButton blue;
+    private final JButton green;
+    private final JButton red ;
+    private final JButton black;
+    private final JButton blue;
     DrawingPanel drawingPanel;
     ColorsPanel(DrawingPanel frame){
         
