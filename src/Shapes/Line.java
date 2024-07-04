@@ -16,8 +16,8 @@ import java.awt.Graphics2D;
  */
 public class Line extends Shape {
 
-    public Line(int x1, int y1, int x2, int y2, int size, Color color) {
-        super(x1, y1, x2, y2, size, color, false);
+    public Line(int x1, int y1, int size, Color color) {
+        super(x1, y1, size, color, false);
     }
 
     @Override

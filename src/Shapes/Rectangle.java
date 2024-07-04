@@ -13,40 +13,30 @@ import java.awt.Graphics2D;
  *
  * @author ESLAM
  */
-public class Rectangle extends Shape{
-    private int width,height;
-    public Rectangle(int x1,int y1,int x2,int y2,int size,Color color,boolean fillState){
-        super(x1, y1, x2, y2,size,color,fillState);
-        width=calcWidth();
-        height=calcHeight();
-    }
-    private int calcWidth(){
-        return x2-x1;
-    }
-    private int calcHeight(){
-        return y2-y1;
+public class Rectangle extends Shape {
+
+    private int drawPoints [];
+    public Rectangle(int x1, int y1, int size, Color color, boolean fillState) {
+        super(x1, y1, size, color, fillState);
     }
 
-    public int getWidth() {
-        return width;
-    }
-
-    public int getHeight() {
-        return height;
+    @Override
+    public void updateCoordinates(int x, int y) {
+        x2=x;
+        y2=y;
+        drawPoints = getMinMaxPoints();
     }
 
     @Override
     public void draw(Graphics2D g2d) {
         g2d.setColor(color);
         g2d.setStroke(new BasicStroke(size, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
-
-        if(fillState){
-            g2d.fillRect(x1, y1, width, height);
-        }
-        else{
-            g2d.drawRect(x1, y1, width, height);
+        if (fillState) {
+            g2d.fillRect(drawPoints[0], drawPoints[1], drawPoints[2] - drawPoints[0], drawPoints[3] - drawPoints[1]);
+        } else {
+            g2d.drawRect(drawPoints[0], drawPoints[1], drawPoints[2] - drawPoints[0], drawPoints[3] - drawPoints[1]);
 
         }
     }
-    
+
 }

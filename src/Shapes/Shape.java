@@ -10,17 +10,18 @@ import java.awt.Graphics2D;
  */
 public abstract class Shape {
 
-    //start point
-    final int x1;
-    final int y1;
-    //end point
-    public int x2;
-    public int y2;
-
-    final int size; 
-    final Color color;
-
-    final boolean fillState;
+    // Coordinates of the starting point
+    final protected int x1;
+    final protected int y1;
+    // Coordinates of the ending point
+    protected int x2;
+    protected int y2;
+    // Line thickness
+    protected final int size;
+    // Color of the shape
+    protected final Color color;
+    // Fill state of the shape
+    protected final boolean fillState;
 
     /**
      * Constructs a Shape with the specified start and end points, color, and
@@ -28,32 +29,45 @@ public abstract class Shape {
      *
      * @param x1 The x-coordinate of the first point.
      * @param y1 The y-coordinate of the first point.
-     * @param x2 The x-coordinate of the second point.
-     * @param y2 The y-coordinate of the second point.
      * @param size specifies the thickness of the lines
      * @param color The color of the shape.
      * @param fillState True if the shape is filled, false otherwise.
      */
-    public Shape(int x1, int y1, int x2, int y2,int size, Color color, boolean fillState) {
+    public Shape(int x1, int y1, int size, Color color, boolean fillState) {
 
-        if (this instanceof Line) {
-            // Keep original coordinates for lines
-            this.x1 = x1;
-            this.y1 = y1;
-            this.x2 = x2;
-            this.y2 = y2;
-        } else {
-            // Ensure x1 and y1 are the smallest values
-            this.x1 = Math.min(x1, x2);
-            this.y1 = Math.min(y1, y2);
+        this.x1 = x1;
+        this.y1 = y1;
+        this.x2 = x1;
+        this.y2 = y1;
 
-            // Ensure x2 and y2 are the greatest values
-            this.x2 = Math.max(x1, x2);
-            this.y2 = Math.max(y1, y2);
-        }
-        this.size=size;
+        this.size = size;
         this.color = color;
         this.fillState = fillState;
+    }
+
+    /**
+     * Updates the coordinates of end point of the shape.
+     *
+     * @param x The new x-coordinate of the second point.
+     * @param y The new y-coordinate of the second point.
+     */
+    public void updateCoordinates(int x, int y) {
+        this.x2 = x;
+        this.y2 = y;
+    }
+
+    /**
+     * Helper method to get the minimum and maximum coordinates between two
+     * points.
+     *
+     * @return integer array contains minimum and maximum Points of x1,x2,y1,y2
+     */
+    protected int[] getMinMaxPoints() {
+        int minX = Math.min(x1, x2);
+        int maxX = Math.max(x1, x2);
+        int minY = Math.min(y1, y2);
+        int maxY = Math.max(y1, y2);
+        return new int[]{minX, minY, maxX, maxY};
     }
 
     /**
