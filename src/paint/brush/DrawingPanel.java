@@ -14,7 +14,11 @@ import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
 /**
@@ -185,6 +189,24 @@ public class DrawingPanel extends JPanel implements MouseListener, MouseMotionLi
     @Override
     public void mouseMoved(MouseEvent e) {
         coordinatesBox.setCoordinates(e.getX(), e.getY());
+    }
+
+    public void exportToPng(File outFile) {
+
+        BufferedImage outImage = new BufferedImage(this.getWidth(), this.getHeight(), BufferedImage.TYPE_INT_RGB);
+        //Create Graphics2D (g2d)to draw into this BufferedImage(outImage).
+        Graphics2D g2d = outImage.createGraphics();
+
+        //paint DrawingPanel to BufferedImage(outImage)
+        this.paint(g2d);
+        //dispose(): helps to release these resources back to the system, ensuring efficient resource management.
+        g2d.dispose();
+        try {
+            // Write the BufferedImage to a file
+            ImageIO.write(outImage, "png", outFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }
