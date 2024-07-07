@@ -3,11 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package paint.brush;
+package paintBrush;
 
+import java.awt.BorderLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import java.awt.Color;
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -27,17 +29,17 @@ public class ColorsPanel extends JPanel{
         
         this.drawingPanel =frame;
         
-        black =createColorButton("Black",Color.black);
-        red =createColorButton("RED",Color.red);
-        green =createColorButton("Green",Color.green);
-        blue=createColorButton("Blue",Color.blue);
+        black =createColorButton("         ",Color.black);
+        red =createColorButton("",Color.red);
+        green =createColorButton("",Color.green);
+        blue=createColorButton("",Color.blue);
 
         this.add(black);
         this.add(red);
         this.add(green);
         this.add(blue);
         
-        setLayout(new GridLayout(1, 4, 5, 5));
+        setLayout(new GridLayout(1,5,5,5));
         setBorder(new TitledBorder("Colors"));
     }
     /**
@@ -49,7 +51,7 @@ public class ColorsPanel extends JPanel{
      */
     private JButton createColorButton(String text,Color color){
         JButton button=new JButton(text);
-        button.setSize(25,25);
+        button.setSize(40,40);
         button.setBackground(color);
         button.addActionListener(new ColorChange());
         return button;
