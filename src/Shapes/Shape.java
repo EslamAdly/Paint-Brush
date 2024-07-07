@@ -3,6 +3,7 @@ package Shapes;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import paintBrush.ShapeStyle;
 
 /**
  *
@@ -20,8 +21,8 @@ public abstract class Shape {
     protected final int size;
     // Color of the shape
     protected final Color color;
-    // Fill state of the shape
-    protected final boolean fillState;
+    // Style of the shape
+    protected final ShapeStyle style;
 
     /**
      * Constructs a Shape with the specified start and end points, color, and
@@ -31,9 +32,9 @@ public abstract class Shape {
      * @param y1 The y-coordinate of the first point.
      * @param size specifies the thickness of the lines
      * @param color The color of the shape.
-     * @param fillState True if the shape is filled, false otherwise.
+     * @param style shapeStyle The style of the shape (None, Solid, Dotted).
      */
-    public Shape(int x1, int y1, int size, Color color, boolean fillState) {
+    public Shape(int x1, int y1, int size, Color color,ShapeStyle style) {
 
         this.x1 = x1;
         this.y1 = y1;
@@ -42,7 +43,7 @@ public abstract class Shape {
 
         this.size = size;
         this.color = color;
-        this.fillState = fillState;
+        this.style = style;
     }
 
     /**

@@ -3,17 +3,21 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package paint.brush;
+package paintBrush;
 
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.border.TitledBorder;
@@ -39,13 +43,20 @@ public class ToolsPanel extends JPanel {
     private final JButton eraserButton;
     private final JButton exportButton;
     private final JSpinner sizeSpinner;
-    private final JCheckBox solidCheckBox;
+    private final JRadioButton solidRadioButton;
+    private final JRadioButton dottedRadioButton;
+    private final JRadioButton noneRadioButton;
+
+    private final ButtonGroup stateGroup;
+    private final JPanel statePanel;
+
     private final JPanel sizePanel;
 
     public ToolsPanel(DrawingPanel frame) {
         this.drawingPanel = frame;
-
-        //Create buttons
+        this.setLayout(new GridLayout(1, 7, 5, 5));
+        this.setBorder(new TitledBorder("Paint Mode"));
+        // 
         clearButton = new JButton("Clear");
         undoButton = new JButton("Undo");
         lineButton = new JButton("Line");
@@ -54,14 +65,42 @@ public class ToolsPanel extends JPanel {
         pencilButton = new JButton("Pencil");
         exportButton = new JButton("Export");
         eraserButton = new JButton("Eraser");
-        solidCheckBox = new JCheckBox("Solid");
 
-        // Create size control panel
-        sizePanel = new JPanel();
-        sizePanel.setBorder(new TitledBorder("Size"));
         sizeSpinner = new JSpinner(new SpinnerNumberModel(INITIAL_SIZE, MIN_SIZE, MAX_SIZE, 1));
-        sizePanel.add(sizeSpinner);
+        solidRadioButton = new JRadioButton("Solid");
+        dottedRadioButton = new JRadioButton("Dotted");
+        noneRadioButton = new JRadioButton("None");
 
+        stateGroup = new ButtonGroup();
+        statePanel = new JPanel();
+        sizePanel = new JPanel();
+        
+        
+        setupStylePanel();
+        setupSizePanel();
+        setupActionListeners();
+        addComponents();
+    }
+
+    private void setupStylePanel() {
+        stateGroup.add(solidRadioButton);
+        stateGroup.add(dottedRadioButton);
+        stateGroup.add(noneRadioButton);
+        noneRadioButton.setSelected(true);  // Set default selection to solid
+
+        statePanel.setLayout(new GridLayout(3, 1, 2, 2));
+        statePanel.add(noneRadioButton);
+        statePanel.add(solidRadioButton);
+        statePanel.add(dottedRadioButton);
+        statePanel.setBorder(new TitledBorder("state"));
+    }
+
+    private void setupSizePanel() {
+        sizePanel.setBorder(new TitledBorder("Size"));
+        sizePanel.add(sizeSpinner);
+    }
+
+    private void setupActionListeners() {
         // Set up action listeners for tool buttons
         lineButton.addActionListener(new ToolActionListener(ShapeType.Line));
         rectangleButton.addActionListener(new ToolActionListener(ShapeType.Rectangle));
@@ -73,15 +112,20 @@ public class ToolsPanel extends JPanel {
         clearButton.addActionListener(e -> drawingPanel.clearShapes());
         undoButton.addActionListener(e -> drawingPanel.removeLast());
 
-        // Set up item listener for solid checkbox
-        solidCheckBox.addItemListener(e -> drawingPanel.setCurrentFillState(!drawingPanel.getcurrentFillState()));
+        // Set up item listener for style radio buttons
+        solidRadioButton.addItemListener(e -> drawingPanel.setCurrentShapeStyle(ShapeStyle.SOLID));
+        noneRadioButton.addItemListener(e -> drawingPanel.setCurrentShapeStyle(ShapeStyle.NONE));
+        dottedRadioButton.addItemListener(e -> drawingPanel.setCurrentShapeStyle(ShapeStyle.DOTTED));
 
         // Set up change listener for size spinner
         sizeSpinner.addChangeListener(e -> drawingPanel.setCurrentSize((int) sizeSpinner.getValue()));
 
         exportButton.addActionListener(e -> exportAction());
-
+    }
+    
+    private void addComponents() {
         //Add buttons to panel
+
         add(undoButton);
         add(clearButton);
         add(lineButton);
@@ -89,11 +133,9 @@ public class ToolsPanel extends JPanel {
         add(ovalButton);
         add(pencilButton);
         add(eraserButton);
-        add(solidCheckBox);
+        add(statePanel);
         add(sizePanel);
         add(exportButton);
-        setLayout(new GridLayout(1, 4, 5, 5));
-        setBorder(new TitledBorder("Paint Mode"));
     }
 
     void exportAction() {

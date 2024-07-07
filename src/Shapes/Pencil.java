@@ -12,6 +12,7 @@ import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.Vector;
 import javafx.util.Pair;
+import paintBrush.ShapeStyle;
 
 /**
  *
@@ -33,7 +34,7 @@ public class Pencil extends Shape {
      * @param color color of shape
      */
     public Pencil(int x1, int y1, int size, Color color) {
-        super(x1, y1, size, color, false);
+        super(x1, y1, size, color, ShapeStyle.NONE);
         this.size = size;
         xPoints = new ArrayList<>();
         yPoints = new ArrayList<>();

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package paint.brush;
+package paintBrush;
 
 import Shapes.*;
 import java.awt.BasicStroke;
@@ -32,7 +32,7 @@ public class DrawingPanel extends JPanel implements MouseListener, MouseMotionLi
 
     //Flag to check if the mouse has been dragged. Ensures mouseReleased logic only executes if a drag event has occurred
     private boolean hasDragged;
-    private boolean currentFillState;
+    private ShapeStyle currentShapeStyle;
     private Color currentColor;
     private int currentSize;
     private final ArrayList<Shape> shapes;
@@ -44,9 +44,9 @@ public class DrawingPanel extends JPanel implements MouseListener, MouseMotionLi
         this.setBackground(Color.white);
         this.currentColor = Color.black;
         this.currentShapeType = ShapeType.Line;
-        this.currentFillState = false;
+        this.currentShapeStyle = ShapeStyle.NONE;
         this.shapes = new ArrayList<>();
-        this.currentSize = 0;
+        this.currentSize = 1;
         addMouseListener(this);
         addMouseMotionListener(this);
     }
@@ -64,12 +64,12 @@ public class DrawingPanel extends JPanel implements MouseListener, MouseMotionLi
         this.currentShapeType = currentShapeType;
     }
 
-    public boolean getcurrentFillState() {
-        return currentFillState;
+    public ShapeStyle getcurrentFillState() {
+        return currentShapeStyle;
     }
 
-    public void setCurrentFillState(boolean currentFillState) {
-        this.currentFillState = currentFillState;
+    public void setCurrentShapeStyle(ShapeStyle currentShapeStyle) {
+        this.currentShapeStyle = currentShapeStyle;
     }
 
     public Color getCurrentColor() {
@@ -130,13 +130,13 @@ public class DrawingPanel extends JPanel implements MouseListener, MouseMotionLi
         int y1 = e.getY();
         switch (currentShapeType) {
             case Line:
-                currentShape = new Line(x1, y1, currentSize, currentColor);
+                currentShape = new Line(x1, y1, currentSize, currentColor,currentShapeStyle);
                 break;
             case Rectangle:
-                currentShape = new Rectangle(x1, y1, currentSize, currentColor, currentFillState);
+                currentShape = new Rectangle(x1, y1, currentSize, currentColor, currentShapeStyle);
                 break;
             case Oval:
-                currentShape = new Oval(x1, y1, currentSize, currentColor, currentFillState);
+                currentShape = new Oval(x1, y1, currentSize, currentColor, currentShapeStyle);
                 break;
             case Pencil:
                 currentShape = new Pencil(x1, y1, currentSize, currentColor);

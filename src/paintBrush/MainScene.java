@@ -1,4 +1,4 @@
-package paint.brush;
+package paintBrush;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,7 +15,7 @@ public class MainScene extends JFrame {
     public MainScene() {
         // Set up the main frame
         setTitle("Paint Brush");
-        setSize(1200, 1000);
+        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
@@ -27,9 +27,9 @@ public class MainScene extends JFrame {
         colorsPanel = new ColorsPanel(drawingPanel);
 
         // Create panels for top and bottom
-        JPanel topPanel = new JPanel(new GridLayout(1, 2, 10, 10));
-        topPanel.add(toolsPanel);
-        topPanel.add(colorsPanel);
+        JPanel topPanel = new JPanel(new BorderLayout());
+        topPanel.add(toolsPanel,BorderLayout.WEST);
+        topPanel.add(colorsPanel,BorderLayout.EAST);
 
         JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         bottomPanel.add(coordinatesBox);
