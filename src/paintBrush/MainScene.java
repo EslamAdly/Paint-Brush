@@ -16,6 +16,7 @@ public class MainScene extends JFrame {
         // Set up the main frame
         setTitle("Paint Brush");
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        this.setMinimumSize(new Dimension(1600,1000));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
